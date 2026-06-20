@@ -1,3 +1,4 @@
+import { ArcjetAllowDecision } from "@arcjet/node";
 import "dotenv/config";
 export const ENV = {
     PORT: process.env.PORT,
@@ -10,7 +11,9 @@ export const ENV = {
     CLIENT_URL: process.env.CLIENT_URL,
     CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
     CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
-    CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET
+    CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
+    ARJET_KEY: process.env.ARJET_KEY,
+    ARJET_ENV: process.env.ARJET_ENV
 
 
 
