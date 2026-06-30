@@ -7,7 +7,7 @@ export const getAllContacts = async (req, res) => {
   try {
     const loggedInUserId = req.user._id;
     const filteredUsers = await User.find({ _id: { $ne: loggedInUserId } }).select("-password");
- 
+
     res.status(200).json(filteredUsers);
   } catch (error) {
     console.log("Error in getAllContacts:", error);
@@ -36,12 +36,12 @@ export const getMessagesByUserId = async (req, res) => {
 
 export const sendMessage = async (req, res) => {
   try {
-    const { text, image, video } = req.body;
+    const { text, image } = req.body;
     const { id: receiverId } = req.params;
     const senderId = req.user._id;
 
-    if (!text && !image && !video) {
-      return res.status(400).json({ message: "Text, image, or video is required." });
+    if (!text && !image) {
+      return res.status(400).json({ message: "Text or image is required." });
     }
     if (senderId.equals(receiverId)) {
       return res.status(400).json({ message: "Cannot send messages to yourself." });
@@ -52,20 +52,10 @@ export const sendMessage = async (req, res) => {
     }
 
     let imageUrl;
-    let videoUrl;
-
     if (image) {
-      // upload base64 image to Cloudinary
+      // upload base64 image to cloudinary
       const uploadResponse = await cloudinary.uploader.upload(image);
       imageUrl = uploadResponse.secure_url;
-    }
-
-    if (video) {
-      // upload base64 video to Cloudinary
-      const uploadResponse = await cloudinary.uploader.upload(video, {
-        resource_type: "video",
-      });
-      videoUrl = uploadResponse.secure_url;
     }
 
     const newMessage = new Message({
@@ -73,7 +63,6 @@ export const sendMessage = async (req, res) => {
       receiverId,
       text,
       image: imageUrl,
-      video: videoUrl,
     });
 
     await newMessage.save();
